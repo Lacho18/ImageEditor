@@ -1,0 +1,34 @@
+.main-div {
+    width: 60%;
+    height: 70%;
+    border: 3px solid black;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.main-div > div {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.style-div {
+    flex-basis: 80%;
+    background-color: aqua;
+    display: flex;
+}
+
+.style-div > div {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 50%;
+}
+
+.image-visual {
+    background-color: blueviolet;
+}
+
+.function-div {
+    flex-basis: 20%;
+}
