@@ -22,11 +22,63 @@
 .style-div > div {
     flex-grow: 1;
     flex-shrink: 1;
-    flex-basis: 50%;
+    /*flex-basis: 50%;*/
 }
+
+.menu-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-basis: 40%;
+}
+
+/*menu-section inner divs
+-----------------------------------------------------------*/
+.buttons-style-type {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.buttons-style-type > button {
+    flex-basis: 40%;
+    flex-shrink: 1;
+    margin: 10px;
+}
+
+.input-range-div {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-range-div > div {
+    display: flex;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.input-range-div > input {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.rotation-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.rotation-buttons > button {
+    font-size: 1.75em;
+}
+
+/*-------------------------------------------------------*/
 
 .image-visual {
     background-color: blueviolet;
+    flex-basis: 60%;
 }
 
 .function-div {
