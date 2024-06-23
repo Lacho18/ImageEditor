@@ -79,8 +79,39 @@
 .image-visual {
     background-color: blueviolet;
     flex-basis: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.image-visual > img {
+    width: 95%;
+    height: 95%;
+    filter: contrast(80%);
+}
+
+
+/* Down side div
+-------------------------------------------------------*/
 
 .function-div {
     flex-basis: 20%;
+    display: flex;
+    justify-content: space-around;
+    background-color: rgb(226, 43, 198);
+}
+
+.function-div > div {
+    flex-basis: 50%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+}
+
+.function-div button, .function-div input {
+    align-self: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 1.20em;
+    padding: 10px;
 }
