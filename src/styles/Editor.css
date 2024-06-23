@@ -82,11 +82,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 10px;
 }
 
 .image-visual > img {
-    width: 95%;
-    height: 95%;
+    /*width: 400px;
+    height: 400px;*/
     filter: contrast(80%);
 }
 
