@@ -9,7 +9,7 @@ function App() {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#72edca"
+    backgroundColor: "#8bced6"
   }
   return (
     <div style={divStyle}>

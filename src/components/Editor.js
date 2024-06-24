@@ -11,6 +11,12 @@ export default function Editor() {
             min: 0,
             max: 200,
             begin: 100
+        },
+        settings: {
+            brightness: 100,
+            saturate: 100,
+            contrast: 100,
+            grayscale: 0
         }
     });
 
@@ -19,18 +25,23 @@ export default function Editor() {
         scale: 0
     });
 
-    /*const [imgDirection, setImgDirection] = useState(1);
+    /*const [imgDirection, setImgDirection] = useState(1);*/
 
     const imgStyle = useRef({
         brightness: 100,
         saturate: 100,
         contrast: 100,
         grayscale: 0
-    });*/
+    });
+
+    const imgSizes = useRef({
+        width: 0,
+        height: 0
+    })
 
     //called every time the range input has changed
     function getRangeData(event) {
-        console.log(event.target.value);
+        styleSettings.settings[styleSettings.functionality] = Number(styleSettings.currentValue);
         setStyleSettings(oldStyle => {
             return { ...oldStyle, currentValue: event.target.value }
         })
@@ -38,10 +49,14 @@ export default function Editor() {
 
     //Called after a style has changed, in order to set the object data
     function setStyleType(type) {
+        imgStyle.current[styleSettings.functionality] = Number(styleSettings.currentValue);
+        styleSettings.settings[styleSettings.functionality] = Number(styleSettings.currentValue);
         let range = getCorrectRange(type);
         setStyleSettings(oldStyle => {
             return { ...oldStyle, type: type, currentValue: range.begin, functionality: type !== "Saturation" ? type.toLowerCase() : "saturate", range: range };
-        })
+        });
+
+        console.log(imgStyle.current);
     }
 
     //Function that sets the border for the styles
@@ -66,6 +81,46 @@ export default function Editor() {
         return response;
     }
 
+    function resetFilter(afterDownload) {
+        if (afterDownload) {
+            setStyleSettings({
+                type: "Brightness",
+                currentValue: 100,
+                functionality: "brightness",
+                range: {
+                    min: 0,
+                    max: 200,
+                    begin: 100
+                },
+                settings: {
+                    brightness: 100,
+                    saturate: 100,
+                    contrast: 100,
+                    grayscale: 0
+                }
+            });
+            setImgSrc({
+                src: "",
+                scale: 0
+            });
+        }
+        else {
+            setStyleSettings(oldStyle => {
+                return {
+                    ...oldStyle, settings: {
+                        brightness: 100,
+                        saturate: 100,
+                        contrast: 100,
+                        grayscale: 0
+                    }
+                }
+            })
+
+            console.log("RESET FUNCTION ELSE BLOCK");
+            console.log(styleSettings);
+        }
+    }
+
     //Function that sets the image that will be visualized by reading the selected file and setting the img source state
     function getImgFile(event) {
         const file = event.target.files[0];
@@ -76,10 +131,8 @@ export default function Editor() {
                 const img = e.target.result;
                 const myImg = new Image();
                 myImg.onload = () => {
-                    console.log("HEREEEEE");
-                    console.log(myImg.width);
-                    console.log(myImg.height);
-
+                    imgSizes.current.width = myImg.width;
+                    imgSizes.current.height = myImg.height;
                     let imageType = 0;
                     if (myImg.width > myImg.height) {
                         imageType = 1
@@ -99,19 +152,50 @@ export default function Editor() {
     }
 
     function downLoadImg() {
-        let link = document.createElement("a");
-        link.href = imgSrc.src;
-        link.download = "edited_image.png"
-        link.click();
+        console.log(imgSizes.current);
+        if (imgSizes.current.width > 0) {
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext('2d');
+
+            canvas.width = imgSizes.current.width;
+            canvas.height = imgSizes.current.height;
+
+            const filters = `
+            brightness(${styleSettings.settings.brightness}%)
+            saturate(${styleSettings.settings.saturate}%)
+            contrast(${styleSettings.settings.contrast}%)
+            grayscale(${styleSettings.settings.grayscale}%)
+        `;
+
+            context.filter = filters.trim();
+
+            let editedImage = document.getElementById("editedImage");
+
+            context.drawImage(editedImage, 0, 0);
+
+            const dataUrl = canvas.toDataURL("image/png");
+
+            resetFilter(true);
+
+            let link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = "edited_image.png"
+            link.click();
+        }
     }
 
-    //console.log(styleSettings);
+    const combinedFilter = `
+    brightness(${styleSettings.settings.brightness}%)
+    saturate(${styleSettings.settings.saturate}%)
+    contrast(${styleSettings.settings.contrast}%)
+    grayscale(${styleSettings.settings.grayscale}%)
+  `;
 
     return (
         <div className="main-div">
             <div className="style-div">
                 <div className="menu-section">
-                    <div style={{ flexBasis: "10%", fontSize: "1.4em", fontWeight: "bold", textAlign: "center" }}>
+                    <div style={{ flexBasis: "10%", fontSize: "1.4em", fontWeight: "bold", textAlign: "center", color: '#00796b' }}>
                         <p>Image Editor</p>
                     </div>
                     <div className="buttons-style-type" style={{ flexBasis: "50%" }}>
@@ -135,18 +219,21 @@ export default function Editor() {
                     </div>
                 </div>
                 <div className="image-visual">
-                    <img src={imgSrc.src}
+                    {imgSrc.src !== "" ? <img id="editedImage"
+                        src={imgSrc.src}
                         style={{
-                            filter: `${styleSettings.functionality}(${styleSettings.currentValue}%)`,
+                            filter: combinedFilter.trim(),
                             width: imgSrc.imageType === 1 ? "500px" : "300px",
-                            height: imgSrc.imageType === 0 ? "400px" : "300px",
+                            height: imgSrc.imageType === 0 ? "350px" : "300px",
                         }}
-                    />
+                    /> :
+                        <p>Select image to visualize it here</p>
+                    }
                 </div>
             </div>
             <div className="function-div">
                 <div>
-                    <button>Reset filter</button>
+                    <button onClick={() => { resetFilter(false) }}>Reset filter</button>
                 </div>
                 <div style={{ justifyContent: "flex-end" }}>
                     <input type="file" placeholder="Choose image" accept="image/*" onChange={getImgFile} />
@@ -156,5 +243,3 @@ export default function Editor() {
         </div>
     )
 }
-
-//src="https://dotesports.com/wp-content/uploads/2020/05/18112329/Cosmic-Dust-Xayah.jpg"
