@@ -20,13 +20,13 @@ export default function Editor() {
         }
     });
 
+    //Describes the image source from the selected file and scale describes whether the image height is bigger that its width 
     const [imgSrc, setImgSrc] = useState({
         src: "",
         scale: 0
     });
 
-    /*const [imgDirection, setImgDirection] = useState(1);*/
-
+    //Reference values of the fixed style components. These are passed to the canvas element when the image is downloaded
     const imgStyle = useRef({
         brightness: 100,
         saturate: 100,
@@ -34,6 +34,7 @@ export default function Editor() {
         grayscale: 0
     });
 
+    //SStores the data for the image resolution
     const imgSizes = useRef({
         width: 0,
         height: 0
@@ -81,6 +82,7 @@ export default function Editor() {
         return response;
     }
 
+    //Function that reset the image styles or on download image resets everything with the image
     function resetFilter(afterDownload) {
         if (afterDownload) {
             setStyleSettings({
@@ -151,6 +153,7 @@ export default function Editor() {
         }
     }
 
+    //Function that describes the process of downloading the image 
     function downLoadImg() {
         console.log(imgSizes.current);
         if (imgSizes.current.width > 0) {
@@ -184,6 +187,7 @@ export default function Editor() {
         }
     }
 
+    //Dynamic styling
     const combinedFilter = `
     brightness(${styleSettings.settings.brightness}%)
     saturate(${styleSettings.settings.saturate}%)
