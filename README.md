@@ -1,7 +1,3 @@
-# Getting Started with Create React App
-
-## Available Scripts
-
 ## Image editor
 
 # Link to the app
