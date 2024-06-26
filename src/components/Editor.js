@@ -1,10 +1,13 @@
 import "../styles/Editor.css";
 import "../styles/MobileStyle.css";
 import { useRef, useState } from "react";
+import BiggerImage from "./BiggerImage";
+import SideButtons from "./SideButtons";
 
 export default function Editor() {
     //Checks if the user device is a phone
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+
     //Describes the image styles
     const [styleSettings, setStyleSettings] = useState({
         type: "Brightness",
@@ -28,6 +31,11 @@ export default function Editor() {
         src: "",
         scale: 0
     });
+
+    //Checks if the image is selected or clicked in order to show it bigger
+    const [selectedImg, setSelectedImg] = useState(false);
+
+    const [imgDegree, setImgDegree] = useState(0);
 
     //Reference values of the fixed style components. These are passed to the canvas element when the image is downloaded
     const imgStyle = useRef({
@@ -190,6 +198,34 @@ export default function Editor() {
         }
     }
 
+    //Function that hides the selected image. It activates wherever on the computer screen is clicked. Does not work on phone.
+    function hideSelectedImage() {
+        console.log(selectedImg);
+        if (selectedImg) {
+            setSelectedImg(false);
+        }
+    }
+
+    function rotationHandler(direction) {
+        if (direction === 1) {
+            console.log(123);
+            if (imgDegree + 90 < 360) {
+                setImgDegree(imgDegree + 90);
+            }
+            else {
+                setImgDegree(0);
+            }
+        }
+        else {
+            if (imgDegree - 90 > 0) {
+                setImgDegree(imgDegree - 90);
+            }
+            else {
+                setImgDegree(360);
+            }
+        }
+    }
+
     //Dynamic styling
     const combinedFilter = `
     brightness(${styleSettings.settings.brightness}%)
@@ -199,7 +235,7 @@ export default function Editor() {
   `;
 
     return (
-        <div className="main-div">
+        <div className="main-div" onClick={hideSelectedImage}>
             <div className="style-div">
                 <div className="menu-section">
                     <div style={{ flexBasis: "10%", fontSize: "1.4em", fontWeight: "bold", textAlign: "center", color: '#00796b' }}>
@@ -218,12 +254,7 @@ export default function Editor() {
                         </div>
                         <input type="range" step={1} onChange={getRangeData} min={styleSettings.range.min} max={styleSettings.range.max} value={styleSettings.currentValue} />
                     </div>
-                    <div className="rotation-buttons" style={{ flexBasis: "20%" }}>
-                        <button>➔</button>
-                        <button>⇒</button>
-                        <button>✦</button>
-                        <button>✧</button>
-                    </div>
+                    <SideButtons onRotate={rotationHandler} />
                 </div>
                 {!isMobile ? (
                     <div className="image-visual">
@@ -231,10 +262,16 @@ export default function Editor() {
                             <img
                                 id="editedImage"
                                 src={imgSrc.src}
+                                onClick={() => {
+                                    if (!isMobile) {
+                                        setSelectedImg(true)
+                                    }
+                                }}
                                 style={{
                                     filter: combinedFilter.trim(),
                                     width: imgSrc.imageType === 1 ? "500px" : "300px",
                                     height: imgSrc.imageType === 0 ? "350px" : "300px",
+                                    transform: `rotate(${imgDegree}deg)`
                                 }}
                             />
                         ) : (
@@ -264,6 +301,7 @@ export default function Editor() {
                     <button onClick={downLoadImg}>Save image</button>
                 </div>
             </div>
+            {selectedImg && <BiggerImage imageSrc={imgSrc.src} />}
         </div>
     )
 }
