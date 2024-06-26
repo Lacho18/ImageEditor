@@ -1,0 +1,50 @@
+@media only screen and (max-width: 600px) {
+    .main-div {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 0;
+    }
+
+    .style-div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .image-visual {
+        width: 95%;
+        height: auto;
+        max-height: 300px;
+        flex-basis: 20%;
+        margin-top: 15px;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .image-visual > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        overflow: hidden;
+    }
+
+    .rotation-buttons {
+        margin-top: 15px;
+    }
+
+    .function-div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .function-div > div {
+        margin-bottom: 15px;
+    }
+
+    .reset-button {
+        align-self: center;
+    }
+}

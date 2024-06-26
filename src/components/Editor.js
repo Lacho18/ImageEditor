@@ -1,7 +1,10 @@
 import "../styles/Editor.css";
+import "../styles/MobileStyle.css";
 import { useRef, useState } from "react";
 
 export default function Editor() {
+    //Checks if the user device is a phone
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
     //Describes the image styles
     const [styleSettings, setStyleSettings] = useState({
         type: "Brightness",
@@ -222,21 +225,38 @@ export default function Editor() {
                         <button>✧</button>
                     </div>
                 </div>
-                <div className="image-visual">
-                    {imgSrc.src !== "" ? <img id="editedImage"
-                        src={imgSrc.src}
-                        style={{
-                            filter: combinedFilter.trim(),
-                            width: imgSrc.imageType === 1 ? "500px" : "300px",
-                            height: imgSrc.imageType === 0 ? "350px" : "300px",
-                        }}
-                    /> :
-                        <p>Select image to visualize it here</p>
-                    }
-                </div>
+                {!isMobile ? (
+                    <div className="image-visual">
+                        {imgSrc.src !== "" ? (
+                            <img
+                                id="editedImage"
+                                src={imgSrc.src}
+                                style={{
+                                    filter: combinedFilter.trim(),
+                                    width: imgSrc.imageType === 1 ? "500px" : "300px",
+                                    height: imgSrc.imageType === 0 ? "350px" : "300px",
+                                }}
+                            />
+                        ) : (
+                            <p>Select image to visualize it here</p>
+                        )}
+                    </div>
+                ) : (
+                    <div className="image-visual">
+                        {imgSrc.src !== "" ? (
+                            <img
+                                id="editedImage"
+                                src={imgSrc.src}
+                                style={{
+                                    filter: combinedFilter.trim()
+                                }}
+                            />
+                        ) : <p>Select image to visualize it here</p>}
+                    </div>
+                )}
             </div>
             <div className="function-div">
-                <div>
+                <div className="reset-button">
                     <button onClick={() => { resetFilter(false) }}>Reset filter</button>
                 </div>
                 <div style={{ justifyContent: "flex-end" }}>
