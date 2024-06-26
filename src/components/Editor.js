@@ -285,7 +285,8 @@ export default function Editor() {
                                 id="editedImage"
                                 src={imgSrc.src}
                                 style={{
-                                    filter: combinedFilter.trim()
+                                    filter: combinedFilter.trim(),
+                                    transform: `rotate(${imgDegree}deg)`
                                 }}
                             />
                         ) : <p>Select image to visualize it here</p>}
@@ -301,7 +302,7 @@ export default function Editor() {
                     <button onClick={downLoadImg}>Save image</button>
                 </div>
             </div>
-            {selectedImg && <BiggerImage imageSrc={imgSrc.src} />}
+            {selectedImg && <BiggerImage imageSrc={imgSrc.src} degRotate={imgDegree} />}
         </div>
     )
 }
